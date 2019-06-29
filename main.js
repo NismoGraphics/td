@@ -147,7 +147,7 @@ var share=true;
 
 
 async function setActivity() {
-  if (!rpc || !mainWindow)
+  if (!mainWindow)
   return;
   
   await mainWindow.webContents.executeJavaScript("new Promise((r,x)=>{\
@@ -187,18 +187,7 @@ async function setActivity() {
     nwin.show();
   }
   
-  rpc.on('ready', () => {
-    setActivity();
-    
-    // activity can only be set every 15 seconds
-    setInterval(() => {
-      setActivity();
-    }, 15e3);
-  });
-  
-  logger.info("Attempt to connect to Discord RPC");
-  rpc.login(ClientId).catch(logger.error);
-  
+ 
   ipcMain.on('sync', (event,arg) => {
     logger.debug("Received synchronous RPC call " + arg);
     if (arg.length >=10 && arg.substring(0,9) == "gsettings") {
