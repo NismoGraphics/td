@@ -70,7 +70,7 @@ const defaultSettings = {
   devmode: "1",
   sharelink: "1",
   safemode: "0",
-  extensionslist: "https://cdn.betterttv.net/betterttv.js,https://cdn.frankerfacez.com/script/script.min.js,https://gist.githubusercontent.com/theeSpark/af59e64632ce7de8cf61dc0c716bb449/raw/231bb0b500bd7ae0ec66ef2450a5a57bf329d454/twitchlitch.js"
+  extensionslist: "https://cdn.betterttv.net/betterttv.js,https://cdn.frankerfacez.com/script/script.min.js,https://gist.githubusercontent.com/theeSpark/af59e64632ce7de8cf61dc0c716bb449/raw/48175a03c57a773e46dc0755b8fd87715a35e2c5/twitchlitch.js"
 };
 
 function init_settings() {
