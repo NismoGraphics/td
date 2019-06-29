@@ -1,26 +1,11 @@
-/*
-td - Twitch client with Discord RPC support
-Copyright 2018, Marc Sances
 
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-*/
 const pjson = require("./package.json");
 const app_ver = pjson.version;
 const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const url = require('url');
-const DiscordRPC = require('discord-rpc');
 const {dialog} = require('electron');
 const {copy, paste} = require('copy-paste')
-const ClientId = '442789695038947328';
 const window = require('electron').BrowserWindow;
 const dispatchUrl = require('./dispatcher').dispatchUrl;
 const {ipcMain} = require('electron');
@@ -85,7 +70,7 @@ const defaultSettings = {
   devmode: "1",
   sharelink: "1",
   safemode: "0",
-  extensionslist: "https://cdn.betterttv.net/betterttv.js,https://cdn.frankerfacez.com/script/script.min.js"
+  extensionslist: "https://cdn.betterttv.net/betterttv.js,https://cdn.frankerfacez.com/script/script.min.js,https://gist.githubusercontent.com/theeSpark/af59e64632ce7de8cf61dc0c716bb449/raw/231bb0b500bd7ae0ec66ef2450a5a57bf329d454/twitchlitch.js"
 };
 
 function init_settings() {
@@ -155,9 +140,6 @@ app.on('activate', () => {
   createWindow();
 });
 
-DiscordRPC.register(ClientId);
-
-const rpc = new DiscordRPC.Client({ transport: 'ipc' });
 const startTimestamp = new Date();
 
 
@@ -174,27 +156,10 @@ async function setActivity() {
     }); 
     
     if (!share) {
-      rpc.setActivity({
-        largeImageKey: "glitchy",
-        largeImageText: "Twitch",
-        instance: false,
-      });
     } else {
       const boops = await mainWindow.webContents.executeJavaScript('window.boops');
       logger.debug("Location: " + mainWindow.webContents.history[mainWindow.webContents.currentIndex])
       var status = dispatchUrl(mainWindow.webContents.history[mainWindow.webContents.currentIndex])
-      logger.debug(status.details + "/" + status.state + "/" + status.largeImageKey + "/" + status.largeImageText + "/" + status.smallImageKey + "/" + status.smallImageText);
-      logger.debug("Setting RPC activity.");
-      rpc.setActivity({
-        details:  status.details,
-        state: status.state,
-        startTimestamp,
-        largeImageKey: status.largeImageKey,
-        largeImageText: status.largeImageText,
-        smallImageKey: status.smallImageKey,
-        smallImageText: status.smallImageText,
-        instance: false,
-      });
     }
   }
   
